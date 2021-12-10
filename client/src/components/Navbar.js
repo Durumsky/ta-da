@@ -6,7 +6,7 @@ import { AuthContext } from "../context/auth";
 
 export default function Navbar() {
 
-    const { isLoggedIn, user} = useContext(AuthContext)
+    const { isLoggedIn, user, logoutUser} = useContext(AuthContext)
     
   return (
     <nav>
@@ -20,7 +20,7 @@ export default function Navbar() {
            <Link to='/connect'>
                <button>Connect</button>
            </Link>
-           <button>Logout</button>
+           <button onClick={logoutUser}>Logout</button>
            </>
        ) : (
            <>
