@@ -8,7 +8,9 @@ import { AuthProviderWrapper } from './context/auth'
 
 ReactDOM.render(
   
+  
   <Router>
+  
   <AuthProviderWrapper>
     <App />
   </AuthProviderWrapper>

@@ -8,7 +8,7 @@ import { AuthContext } from "../context/auth";
 
 export default function Signup() {
 
-    //const { isLoggedIn, user} = useContext(AuthContext)
+    const { isLoggedIn, user} = useContext(AuthContext)
 
     const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
@@ -51,9 +51,6 @@ export default function Signup() {
             <button type='submit'>Create Account</button>
             </form>
             {errorMessage && <p>{errorMessage}</p>}
-        </div>
-        <div>
-            <Login />
         </div>
         </>
     )

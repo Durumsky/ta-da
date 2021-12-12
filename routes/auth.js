@@ -11,6 +11,7 @@ const saltRounds = 10
 router.post('/signup', (req, res, next) =>{
 
     const { username, password} = req.body
+    
 
     if (username === '' || password === '') {
         res.status(400).json({ message: 'Provide username and password'})
@@ -37,10 +38,8 @@ router.post('/signup', (req, res, next) =>{
     const salt = bcrypt.genSaltSync(saltRounds)
     const hashedPassword = bcrypt.hashSync(password, salt)
 
+    return User.create({username, password: hashedPassword, partnerID: '', connected: false})
 
-
-
-    return User.create({username, password: hashedPassword})
     })
     .then(createdUser => {
         const { username, _id } = createdUser
@@ -74,7 +73,7 @@ router.post('/login', (req, res, next) => {
         const passwordCorrect = bcrypt.compareSync(password, foundUser.password)
         if (passwordCorrect){
             const { _id, username } = foundUser
-            const payload = { _id, username}
+            const payload = { _id, username }
 
             //create the json web token
             const authToken = jwt.sign(
@@ -82,8 +81,12 @@ router.post('/login', (req, res, next) => {
                 process.env.TOKEN_SECRET,
                 { algorithm: 'HS256', expiresIn: '12h' }
             )
+        const userConnected = foundUser.connected
 
-            res.status(200).json({ authToken: authToken })
+           
+            
+
+            res.status(200).json({ authToken: authToken, userConnected: userConnected })
         }
         else {
             res.status(401).json({ message: 'Unable to authenticate user'})
@@ -95,28 +98,62 @@ router.post('/login', (req, res, next) => {
     })
 })
 
+
 router.get('/verify', isAuthenticated, (req, res, next) => {
     // if the token is valid we can acces it on req.payload
-    console.log('usersId:', req.payload._id)
+    console.log('/Verify sais that the token is valid. The ID of the user:', req.payload._id)
     res.status(200).json(req.payload)
 })
 
-// router.post('/connect', (req, res, next) => {
+router.post('/connect', (req, res, next) => {
+    //console.log(req.body.user._id, req.body.partnerID)
+    const username = req.body.user.username
+    const userID = req.body.user._id
+    const partnerID = req.body.partnerID
+    
 
-//     const { username, partnerId } = req.body
+    User.findOneAndUpdate({username}, {partnerID: partnerID}, {new: true})
+    .then((user)=>{
+        const userConnected = user.connected
+        User.findOne({_id: partnerID})
+        .then(foundPartner => {
+            //console.log(foundPartner.connected)
+            //check if the provided ID belong to any existing user
+            if (!foundPartner){
+                res.status(400).json({ message: 'The ID you provided was not found'})
+            }
+            //the partner user is found
+            //check if the foundUser has the ID of the user in his/her partnerID key
+            else if (foundPartner.partnerID === userID){
+                //console.log('both users have introduced their partnerIDs')
+                //update both user to connected: true
+                User.findOneAndUpdate({username}, {connected: true}, {new: true})
+                .then(()=>{
+                    res.status(200).json({userConnected: userConnected})
+                    User.findOneAndUpdate({_id: partnerID}, {connected: true}, {new: true})
+                    .then(()=>{})
+                    .catch(err => console.log(err))
+                })
+                .catch(err => console.log(err))
+                
+            }
+        })
+    })
+    .catch(err => console.log(err))
+})
 
-//     if (partnerId === '') {
-//         res.status(400).json({ message: 'Provide a partnerId'})
-//         return
-//     }
+router.post('/connectCheck', (req, res, next)=> {
+    //console.log('/connectCheck works')
+    const username = req.body.username
+    User.findOne({username})
+    .then(foundUser => {
+        const connected = foundUser.connected
+        res.status(200).json({userConnected: connected })
+    })
+    .catch(err => console.log(err))
+})
 
-//     User.findByIdAndUpdate(req.session)
 
-//     .catch(err => {
-//         next(err)
-//         res.status(500).json({ message: 'Internal Server Error' })
-//     })
-// })
 
 
 module.exports = router;
