@@ -7,27 +7,39 @@ import axios from "axios";
 
 //components
 import Signup from "../components/Signup";
-import Connect from "../components/Connect";
 
 export default function Main() {
-  const { isLoggedIn, user, logoutUser } = useContext(AuthContext);
   const [partnerID, setPartnerID] = useState("");
+  const [partnerFound, setPartnerFound] = useState(true);
+  const [errorMessage, setErrorMessage] = useState(undefined);
+  const { isLoggedIn, user, logoutUser } = useContext(AuthContext);
   
- 
+  let partnerName = "";
 
   const handlePartnerID = (e) => setPartnerID(e.target.value);
 
   const handleConnect = (e) => {
     e.preventDefault();
-    const requestBody = { partnerID,  user};
+    const requestBody = { partnerID, user };
 
     axios
-    .post("/connect", requestBody)
-    .then(()=>{})
-    .catch(()=>{})
+      .post("/connect", requestBody)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => {
+        const errorDescription = err.response.data.message;
+        setErrorMessage(errorDescription);
+      });
     setPartnerID('')
-    //ConnectCheck()
+  };
 
+  const handleAccept = (e) => {
+
+  }
+
+  const handleDeny = (e) => {
+    setPartnerFound = false
   }
   
   //check the status isConnected every 2s if its value is false
@@ -57,15 +69,23 @@ export default function Main() {
   //ConnectCheck()
 
   return <>{isLoggedIn ? 
-  <div>
+    <div>
       <h3>Hello {user.username}, this is your ID: </h3>
       <p className="id-box">{user._id}</p>
       <h3>Would you to connect with your partner?</h3>
       <p>Copy here the ID of your partner:</p>
-      <form onSubmit={handleConnect}>
+      <form onSubmit={handleAccept}>
         <input type="text" value={partnerID} onChange={handlePartnerID}></input>
-        <button type="submit">Connect!</button>
+        <button onClick={handleConnect} >Connect!</button>
+        {partnerFound &&
+        <>
+        <p>Do you want to connect with {partnerName}?</p>
+        <button type="submit">Accept</button>
+        <button onClick={handleDeny}>Deny</button>
+        </>
+        }
       </form>
+      {errorMessage && <p>{errorMessage}</p>}
     </div>
   : <Signup />}</>;
 }
