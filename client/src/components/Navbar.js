@@ -11,7 +11,7 @@ export default function Navbar() {
   return (
     <>
       <nav className="navbar">
-        <Link to="/">
+        <Link to="/app">
           <p> Back </p>
         </Link>
         {isLoggedIn ? (
@@ -21,7 +21,7 @@ export default function Navbar() {
                 <i className="fa fa-caret-down"></i>
               </button>
               <div className="dropdown-content">
-                <Link to="/account">
+                <Link to="/app/account">
                   <p>Your account</p>
                 </Link>
                 <Link to="/">

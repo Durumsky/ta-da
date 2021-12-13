@@ -7,6 +7,8 @@ import { AuthContext } from "../context/auth";
 export default function Connect() {
 
   const [partnerID, setPartnerID] = useState("");
+  const [accept, setAccept] = useState(false)
+  const [errorMessage, setErrorMessage] = useState(undefined);
   const { isLoggedIn, user, logoutUser } = useContext(AuthContext);
  
 
@@ -18,7 +20,14 @@ export default function Connect() {
 
     axios
     .post("/connect", requestBody)
-    setPartnerID('')
+    .then((response) => {
+      console.log(response)
+    })
+    .catch((err) => {
+      const errorDescription = err.response.data.message;
+      setErrorMessage(errorDescription);
+    });
+    //setPartnerID('')
 
   }
 
@@ -32,6 +41,7 @@ export default function Connect() {
         <input type="text" value={partnerID} onChange={handlePartnerID}></input>
         <button type="submit">Connect!</button>
       </form>
+      {errorMessage && <p>{errorMessage}</p>}
     </div>
   );
 }

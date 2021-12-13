@@ -18,7 +18,7 @@ export default function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const requestBody = { username, password };
-
+console.log(requestBody)
     axios
       .post("/login", requestBody)
       .then((response) => {
@@ -28,9 +28,10 @@ export default function Login() {
         //call logInUser from auth context
         //console.log("this is my token:", token);
         loginUser(token);
-        navigate("/");
+        navigate("/app");
       })
       .catch((err) => {
+        console.log(err)
         const errorDescription = err.response.data.message;
         setErrorMessage(errorDescription);
       });
