@@ -58,8 +58,6 @@ router.post('/signup', (req, res, next) =>{
 
 router.post('/login', (req, res, next) => {
 
-    console.log(req.body)
-
     const { username, password } = req.body
 
     if (username === '' || password === '') {
@@ -110,7 +108,7 @@ router.post('/login', (req, res, next) => {
 
 router.get('/verify', isAuthenticated, (req, res, next) => {
     // if the token is valid we can acces it on req.payload
-    console.log('/Verify sais that the token is valid. The ID of the user:', req.payload._id)
+    console.log('/Verify sais that the token is valid. The ID of the user:')
     res.status(200).json(req.payload)
     return;
 })

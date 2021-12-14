@@ -8,6 +8,7 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(undefined);
+  const [usersConnected, setUsersConnected] = useState(false);
 
   const navigate = useNavigate();
 
@@ -18,17 +19,14 @@ export default function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const requestBody = { username, password };
-console.log(requestBody)
     axios
       .post("/login", requestBody)
       .then((response) => {
         console.log('Is the user connected to its partner?', response.data.userConnected)
-
-        const token = response.data.authToken;
+            const token = response.data.authToken;
         //call logInUser from auth context
         //console.log("this is my token:", token);
         loginUser(token);
-        navigate("/app");
       })
       .catch((err) => {
         console.log(err)
@@ -36,6 +34,8 @@ console.log(requestBody)
         setErrorMessage(errorDescription);
       });
   };
+
+  
 
   return (
     <>

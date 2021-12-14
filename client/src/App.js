@@ -17,7 +17,7 @@ function App() {
   return (
     <>
       <Navbar />
-      <div className="app-container">
+      
         <div style={{ maxWidth: 900 }}>
           <Routes>
             <Route path="/" element={<Main />} />
@@ -50,7 +50,6 @@ function App() {
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
-      </div>
     </>
   );
 }
