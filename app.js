@@ -24,6 +24,12 @@ require("./config")(app);
 const auth = require("./routes/auth");
 app.use("/", auth);
 
+const connection = require("./routes/connection");
+app.use("/", connection)
+
+const tadata = require("./routes/tadata");
+app.use("/", tadata)
+
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require("./error-handling")(app);
 

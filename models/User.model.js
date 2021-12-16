@@ -14,9 +14,13 @@ const userSchema = new Schema(
       required: true,
     },
 
-    partnerId: String
-    
+    partnerID: String,
+    connected: Boolean,
+    name: String,
+    lastName: String,
+    pronounce: String
 
+    
    },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`
