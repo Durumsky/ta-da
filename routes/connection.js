@@ -87,16 +87,27 @@ router.post("/connectionInfo", (req, res, next) => {
     .then((foundUser) => {
       const partnerID = foundUser.partnerID;
       const connected = foundUser.connected;
+      const name = foundUser.name;
+      const lastName = foundUser.lastName;
+      const pronounce = foundUser.pronounce;
+
 
       if (ObjectId.isValid(partnerID)){
         User.findOne({ _id: partnerID })
         .then((foundPartner) => {
-          const partnerName = foundPartner.username;
+          const partnerName = foundPartner.name;
+          const partnerLastName = foundPartner.lastName;
+          const partnerPronounce = foundPartner.pronounce;
           res
             .status(200)
             .json({
               partnerID: partnerID,
               partnerName: partnerName,
+              partnerLastName: partnerLastName,
+              partnerPronounce: partnerPronounce,
+              name: name,
+              lastName: lastName,
+              pronounce: pronounce,
               connected: connected,
             });
         })

@@ -5,8 +5,9 @@ import { AuthContext } from "../context/auth";
 
 export default function Login() {
 
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  
   const [errorMessage, setErrorMessage] = useState(undefined);
   const [usersConnected, setUsersConnected] = useState(false);
 
@@ -18,7 +19,7 @@ export default function Login() {
   const handlePassword = (e) => setPassword(e.target.value);
   const handleSubmit = (e) => {
     e.preventDefault();
-    const requestBody = { username, password };
+    const requestBody = { username, password};
     axios
       .post("/login", requestBody)
       .then((response) => {
@@ -56,6 +57,7 @@ export default function Login() {
           <button type="submit">Login</button>
         </form>
         {errorMessage && <p>{errorMessage}</p>}
+        
       </div>
     </>
   );

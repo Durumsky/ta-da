@@ -94,7 +94,7 @@ export default function Main() {
   return (
     <>
   
-      <div className="app-container">
+      
         {isLoggedIn ? (
           <div>
             <h3>Hello {user.username}, this is your ID: </h3>
@@ -134,7 +134,6 @@ export default function Main() {
         ) : (
           <Signup />
         )}
-      </div>
     </>
   );
 }

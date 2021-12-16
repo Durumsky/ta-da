@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/auth";
 import axios from "axios";
 
-export default function Account() {
+export default function Account(props) {
   const { isLoggedIn, user, logoutUser } = useContext(AuthContext);
   const [ connected, setConnected ] = useState()
   const [ partnerName, setPartnerName ] = useState()
@@ -14,6 +14,8 @@ export default function Account() {
   const navigate = useNavigate();
 
   //get the information: if there user is connected && with which user
+  console.log(props)
+  
   function checkInfo() {
     axios
     .post("/connectionInfo", user)
@@ -29,10 +31,6 @@ export default function Account() {
     .catch((err) => console.log(err.data));
   }
 checkInfo()
-  // useEffect(() => {
-  //   checkInfo();
-    
-  // }, []);
 
   const handleDeleteConnection = (e) => {
     e.preventDefault();
@@ -62,11 +60,11 @@ checkInfo()
 
   return (
     <div>
-      <h3>Hello {user.username}</h3>
+      <h3>Hello {props.name} {props.lastName}</h3>
       <h4>About your connection</h4>
       {connected ? (
         <>
-        <p>Your account is connected with <b>{partnerName}</b></p>
+        <p>Your account is connected with <b>{props.partnerName} {props.partnerLastName}</b></p>
       <button onClick={handleDeleteConnection}>Delete Connection</button>
         </>
       ) : (

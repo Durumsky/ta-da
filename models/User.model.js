@@ -16,6 +16,10 @@ const userSchema = new Schema(
 
     partnerID: String,
     connected: Boolean,
+    name: String,
+    lastName: String,
+    pronounce: String
+
     
    },
   {
