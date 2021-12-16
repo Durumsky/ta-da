@@ -10,7 +10,8 @@ const saltRounds = 10
 
 router.post('/signup', (req, res, next) =>{
 
-    const { username, password} = req.body
+    const { username, password, name, lastName, pronounce} = req.body
+    
 
     if (username === '' || password === '') {
         res.status(400).json({ message: 'Provide username and password'})
@@ -37,21 +38,21 @@ router.post('/signup', (req, res, next) =>{
     const salt = bcrypt.genSaltSync(saltRounds)
     const hashedPassword = bcrypt.hashSync(password, salt)
 
+    return User.create({username, password: hashedPassword, partnerID: '', connected: false, name, lastName, pronounce})
 
-
-
-    return User.create({username, password: hashedPassword})
     })
     .then(createdUser => {
         const { username, _id } = createdUser
         const user = { username, _id }
 
         res.status(201).json({ user: user })
+        return;
     })
 
     .catch(err => {
         next(err)
         res.status(500).json({ message: 'Internal Server Error' })
+        return;
     })
 })
 
@@ -68,13 +69,15 @@ router.post('/login', (req, res, next) => {
     .then(foundUser => {
         if (!foundUser){
             res.status(400).json({ message: 'User not found'})
+            return;
         }
 
         //this is a boolean
         const passwordCorrect = bcrypt.compareSync(password, foundUser.password)
+
         if (passwordCorrect){
             const { _id, username } = foundUser
-            const payload = { _id, username}
+            const payload = { _id, username }
 
             //create the json web token
             const authToken = jwt.sign(
@@ -82,41 +85,41 @@ router.post('/login', (req, res, next) => {
                 process.env.TOKEN_SECRET,
                 { algorithm: 'HS256', expiresIn: '12h' }
             )
+        const userConnected = foundUser.connected
 
-            res.status(200).json({ authToken: authToken })
+           
+            
+
+            res.status(200).json({ authToken: authToken, userConnected: userConnected })
+            return;
         }
         else {
             res.status(401).json({ message: 'Unable to authenticate user'})
+            return;
         }
     })
     .catch(err => {
         console.log(err);
         res.status(500).json({ message: 'Internal Server Error' })
+        return;
     })
 })
 
+
 router.get('/verify', isAuthenticated, (req, res, next) => {
     // if the token is valid we can acces it on req.payload
-    console.log('usersId:', req.payload._id)
+    console.log('/Verify sais that the token is valid. The ID of the user:')
     res.status(200).json(req.payload)
+    return;
 })
 
-// router.post('/connect', (req, res, next) => {
 
-//     const { username, partnerId } = req.body
 
-//     if (partnerId === '') {
-//         res.status(400).json({ message: 'Provide a partnerId'})
-//         return
-//     }
 
-//     User.findByIdAndUpdate(req.session)
 
-//     .catch(err => {
-//         next(err)
-//         res.status(500).json({ message: 'Internal Server Error' })
-//     })
-// })
+
+
+
 
 
 module.exports = router;
