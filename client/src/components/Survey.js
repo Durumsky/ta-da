@@ -18,6 +18,7 @@ export default function Survey(props) {
   const [partnerPronoun, setPartnerPronoun] = useState("");
   const [partnerDeterminant, setPartnerDeterminant] = useState("");
   const username = user.username;
+  const partnerID = props.partnerID
 
 
 
@@ -108,18 +109,47 @@ checkPartnerDeterminant(props.partnerPronounce)
       .catch((err) => console.log(err.data));
   };
 
+  function checkSurvey(){
+    axios
+    .get(`/checkSurvey/${user.username}`)
+    .then((response) => {
+        props.changeCreatedTime(response.data.createdTime)
+    })
+    .catch((err) => console.log(err.data));
+  }
+
+  useEffect(() => {
+    checkSurvey()
+  }, [])
+
+  function checkPartnerSurvey(){
+    axios
+    .post("/checkPartnerSurvey/", {partnerID})
+    .then((response) => {
+        props.changePartnerCreatedTime(response.data.createdTime)
+  
+    })
+    .catch((err) => console.log(err.data));
+  }
+
+  useEffect(() => {
+    checkPartnerSurvey()
+  }, [])
+
   return (
-    <>
+    <div className="form-container">
       <h2>The Survey of the Week </h2>
-      <p>
-        Score this questions to compare your views with those of
-        <b>
-          {props.partnerName} {props.partnerLastName}
-        </b>
-      </p>
+      <span>
+        Score this questions to compare your views with those of <b>{props.partnerName} {props.partnerLastName}</b>
+      </span>
+      <br></br>
+      <br></br>
       <form onSubmit={handleSubmit}>
+      <div className="form-container">
         <h4>Communication</h4>
-        <label>
+          <div>
+            <div>
+        <label className="label-survey">
           Of course you listened to <b>{props.partnerName}</b> this week, but
           how much?
         </label>
@@ -130,8 +160,11 @@ checkPartnerDeterminant(props.partnerPronounce)
           <option>4</option>
           <option>5</option>
         </select>
+        </div>
+        </div>
         <br></br>
-        <label>
+        <div>
+        <label className="label-survey">
           And <b>{partnerPronoun}</b> to you?
         </label>
         <select onChange={handleBeingListened} value={beingListened}>
@@ -141,11 +174,12 @@ checkPartnerDeterminant(props.partnerPronounce)
           <option>4</option>
           <option>5</option>
         </select>
+        </div>
 
         {/* <input type="radio" /> 1 */}
         <br></br>
-        <br></br>
-        <label>
+        <div>
+        <label className="label-survey">
           By hearing to <b>{props.partnerName}</b>, did you get any idea of
           something nice you could do to <b>{partnerDeterminant}</b>?
         </label>
@@ -153,9 +187,11 @@ checkPartnerDeterminant(props.partnerPronounce)
           <option>Yes!</option>
           <option>Not this time</option>
         </select>
+        </div>
 
         <h4>Team Time</h4>
-        <label>It's time for a weekly sex score:</label>
+        <div>
+        <label className="label-survey">It's time for a weekly sex score:</label>
         <select onChange={handleSexScore} value={sexScore}>
           <option>1</option>
           <option>2</option>
@@ -163,12 +199,13 @@ checkPartnerDeterminant(props.partnerPronounce)
           <option>4</option>
           <option>5</option>
         </select>
+       </div>
         <br></br>
-        <br></br>
-        <label>
+       
+        <div>
+        <label className="label-survey">
           If the old and almost dying version of yourself would look back into
-          this week,<br></br>
-          how would <b>{pronoun}</b> rank the use you did of the NOWs with <b>{props.partnerName}</b>?
+          this week, how would <b>{pronoun}</b> rank the use you did of the NOWs with <b>{props.partnerName}</b>?
         </label>
         <select onChange={handleNowsRank} value={nowsRank}>
           <option>1</option>
@@ -177,20 +214,23 @@ checkPartnerDeterminant(props.partnerPronounce)
           <option>4</option>
           <option>5</option>
         </select>
+        </div>
         <br></br>
+        
+        <div>
+        <label className="label-survey">So shortly as you can: one moment you very much liked:</label>
         <br></br>
-        <label>So shortly as you can: one moment you very much liked:</label>
-        <br></br>
-        <br></br>
+        </div>
         <textarea
           type="text"
           rows="5"
-          style={{ width: 400 }}
           onChange={handleMomentDescription}
           value={momentDescription}
         ></textarea>
+        
         <h4>Me Time</h4>
-        <label>
+        <div>
+        <label className="label-survey">
           Do you feel that you got enough space and time to pursue your personal
           hobbies/activities?
         </label>
@@ -198,10 +238,12 @@ checkPartnerDeterminant(props.partnerPronounce)
           <option>Yes</option>
           <option>Could have been more</option>
         </select>
+        </div>
         <br></br>
-        <br></br>
-        <button type="submit">Send!</button>
+        <button className="btn-general" style={{ width: 80}} type="submit">Send!</button>
+  
+        </div>
       </form>
-    </>
+      </div>
   );
 }

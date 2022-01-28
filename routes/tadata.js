@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const User = require("../models/User.model");
 const Survey = require("../models/Survey.model");
+const Secret = require("../models/Secret.model");
 const ObjectId = require("mongoose").Types.ObjectId;
 
 router.post("/submitSurvey", (req, res, next) => {
@@ -16,10 +17,6 @@ router.post("/submitSurvey", (req, res, next) => {
     momentDescription: req.body.momentDescription,
     personalSpace: req.body.personalSpace,
   }).then(() => {
-    Survey.findOneAndUpdate(
-      { username },
-      { momentDescription: "update the last document" }
-    ).sort({ date: -1 });
   });
 });
 
@@ -64,8 +61,8 @@ router.post("/checkPartnerSurvey/", (req, res, next) => {
   User.findOne({ _id: partnerID })
     .then((partner) => {
       const partnerUsername = partner.username;
-      console.log(partnerUsername, "hola");
-      Survey.find({ partnerUsername })
+     
+      Survey.find({ username: partnerUsername })
         .sort({ _id: -1 })
         .limit(1)
         .then((newestPartnerEntry) => {
@@ -102,5 +99,42 @@ router.post("/checkPartnerSurvey/", (req, res, next) => {
       console.log(err);
     });
 });
+
+router.post("/addNewSecret", (req, res, next) => {
+  const newSecretTitle =req.body.newSecretTitle
+  const newSecret = req.body.newSecret
+  const username = req.body.user.username
+
+  Secret.create({
+    username: username,
+    secretTitle: newSecretTitle,
+    secret: newSecret,
+  })
+})
+
+router.post("/showSecrets", (req, res, next) => {
+  const username = req.body.username
+
+  Secret.find({username}).sort({ _id: -1 })
+  .then((foundSecrets) => {
+    res.status(200).json({foundSecrets})
+  })
+  .catch((err) => {console.log(err)})
+})
+
+router.post("/partner-secrets", (req, res, next) => {
+  const partnerID = req.body.partnerID
+
+  User.findOne({_id: partnerID})
+    .then(foundUser => {
+      const partnerUsername = foundUser.username
+      Secret.find({username: partnerUsername}).sort({ _id: -1 })
+      .then((foundSecrets) => {
+        res.status(200).json({foundSecrets})
+      })
+      .catch((err) => {console.log(err)})
+    })
+    .catch(err => console.log(err))
+})
 
 module.exports = router;

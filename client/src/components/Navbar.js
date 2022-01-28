@@ -12,7 +12,7 @@ export default function Navbar() {
     <>
       <nav className="navbar">
       <Link to="/app">
-          <p> Back </p>
+          <p> Home </p>
         </Link>
         {isLoggedIn ? (
             <div className="dropdown">

@@ -96,20 +96,25 @@ export default function Main() {
   
       
         {isLoggedIn ? (
-          <div>
+          <div className="form-container">
             <h3>Hello {user.username}, this is your ID: </h3>
             <p className="id-box">{user._id}</p>
             <h3>Would you to connect with your partner?</h3>
             <form onSubmit={handleAccept}>
               {!partnerFound && (
                 <>
-                  <p>Copy here the ID of your partner:</p>
+                  <p style={{textAlign: 'center'}}>Copy here the ID of your partner:</p>
                   <input
                     type="text"
+                    style={{width: 300}}
                     value={partnerID}
                     onChange={handlePartnerID}
                   ></input>
-                  <button onClick={handleConnect}>Connect!</button>
+                  <br></br>
+                  <br></br>
+                  <div className="form-container">
+                  <button className="btn-general" onClick={handleConnect}>Connect!</button>
+                  </div>
                 </>
               )}
 
@@ -118,8 +123,8 @@ export default function Main() {
                   <p>
                     Do you want to connect with <b>{partnerName}</b>?
                   </p>
-                  <button type="submit">Accept</button>
-                  <button onClick={handleDeny}>Deny</button>
+                  <button className="btn-general" type="submit">Accept</button>
+                  <button className="btn-general" onClick={handleDeny}>Deny</button>
                   {!usersConnected && accept && (
                     <p>
                       Wait until <b>{partnerName}</b> also accepts the

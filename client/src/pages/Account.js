@@ -4,11 +4,12 @@ import { Routes, Route } from "react-router-dom";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/auth";
 import axios from "axios";
+import Footer from "../components/Footer"
 
 export default function Account(props) {
   const { isLoggedIn, user, logoutUser } = useContext(AuthContext);
-  const [ connected, setConnected ] = useState()
-  const [ partnerName, setPartnerName ] = useState()
+  const [ connected, setConnected ] = useState(props.connected)
+  const [ partnerName, setPartnerName ] = useState(props.partnerName)
   const [ partnerID, setPartnerID ] = useState()
 
   const navigate = useNavigate();
@@ -21,7 +22,6 @@ export default function Account(props) {
     .post("/connectionInfo", user)
     .then((response) => {
       
-        setConnected(response.data.connected)
         setPartnerName(response.data.partnerName)
         setPartnerID(response.data.partnerID)
       
@@ -59,21 +59,25 @@ checkInfo()
   console.log(partnerID, partnerName, connected)
 
   return (
-    <div>
+    <>
+    <div className="form-container">
       <h3>Hello {props.name} {props.lastName}</h3>
       <h4>About your connection</h4>
       {connected ? (
         <>
         <p>Your account is connected with <b>{props.partnerName} {props.partnerLastName}</b></p>
-      <button onClick={handleDeleteConnection}>Delete Connection</button>
+      <button className="btn-general" onClick={handleDeleteConnection}>Delete Connection</button>
         </>
       ) : (
         <p>Right now your account is not connected with any user</p>
       )}
+      <br></br>
+      <br></br>
       <h4>About your account</h4>
-      <p>Do you want to delete your account?</p>
-      <p>All your data will be removed.</p>
-      <button onClick={handleDeleteAccount}>Delete Account</button>
+      <p>Do you want to delete your account? All your data will be removed.</p>
+      <button className="btn-general" onClick={handleDeleteAccount}>Delete Account</button>
     </div>
+    < Footer />
+    </>
   );
 }

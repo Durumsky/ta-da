@@ -37,7 +37,6 @@ function App() {
     axios
       .post("/connectionInfo", user)
       .then((response) => {
-        console.log(response.data)
         setConnected(response.data.connected)
         setName(response.data.name)
         setLastName(response.data.lastName)
@@ -51,7 +50,6 @@ function App() {
   }
   checkInfo();
 
-  console.log(connected, name, lastName, pronounce, partnerName, partnerLastName, partnerPronounce)
 
   return (
     <>
@@ -73,7 +71,7 @@ function App() {
               path="/app/account"
               element={
                 <ProtectedRoute redirectTo="/">
-                  <Account name={name} lastName={lastName} pronounce={pronounce} connected={connected} partnerName={partnerName} partnerLastName={partnerLastName} partnerPronounce={partnerPronounce}/>
+                  <Account name={name} lastName={lastName} pronounce={pronounce} connected={connected} partnerName={partnerName} partnerLastName={partnerLastName} partnerPronounce={partnerPronounce} partnerID={partnerID}/>
                 </ProtectedRoute>
               }
             />
@@ -81,7 +79,7 @@ function App() {
               path="/app/secrets"
               element={
                 <ProtectedRoute redirectTo="/">
-                  <Secrets name={name} lastName={lastName} pronounce={pronounce} connected={connected} partnerName={partnerName} partnerLastName={partnerLastName} partnerPronounce={partnerPronounce}/>
+                  <Secrets name={name} lastName={lastName} pronounce={pronounce} connected={connected} partnerName={partnerName} partnerLastName={partnerLastName} partnerPronounce={partnerPronounce} partnerID={partnerID}/>
                 </ProtectedRoute>
               }
             />

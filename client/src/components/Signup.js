@@ -46,48 +46,67 @@ export default function Signup() {
 
   return (
     <>
-      <div>
+      <div className="form-container">
         <h2>Signup</h2>
-        <p>Create a new account to use Ta-da</p>
+        <span>Create a new account to use Ta-da</span>
+        <br></br>
+        <br></br>
         <form onSubmit={handleSubmit}>
-          <input
+        <div className="form-item">
+        <label>Create your username</label>
+        <input
             type="text"
             value={username}
             onChange={handleUsername}
-            placeholder="Create your username"
+            placeholder="Username"
           />
-          <br></br>
+        </div>
+        <br></br>
+        <div className="form-item">
+          <label>What is your name?</label>
           <input
             type="text"
             value={name}
             onChange={handleName}
-            placeholder="What is your name?"
+            placeholder="Name"
           />
+          </div>
           <br></br>
+          <div className="form-item">
+          <label>What is your lastname?</label>
           <input
             type="text"
             value={lastName}
             onChange={handleLastName}
-            placeholder="What is your lastname?"
+            placeholder="Lastname"
           />
+          </div>
           <br></br>
+          <div className="form-item">
           <label>How are you pronounced?</label>
           <select value= {pronounce} onChange={handlePronounce}>
           <option>She/her</option>
           <option>He/his</option>
           <option>They/their</option>
           </select>
+          </div>
           <br></br>
+          <div className="form-item">
+          <label>Create a password</label>
           <input
             type="password"
             value={password}
             onChange={handlePassword}
-            placeholder="Create your password"
+            placeholder="Password"
           />
+          </div>
           <br></br>
           <br></br>
-          <button type="submit">Create Account</button>
+          <div className="form-item">
+          <button className="btn-general" type="submit">Create Account</button>
+          </div>
         </form>
+        
         {errorMessage && <p>{errorMessage}</p>}
       </div>
     </>

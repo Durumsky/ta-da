@@ -54,7 +54,7 @@ export default function Login() {
             onChange={handlePassword}
             placeholder="Password"
           />
-          <button type="submit">Login</button>
+          <button className="btn-login" type="submit">Login</button>
         </form>
         {errorMessage && <p>{errorMessage}</p>}
         
